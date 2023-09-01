@@ -6,7 +6,7 @@
 /*   By: vgejno <vgejno@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 22:41:15 by vgejno            #+#    #+#             */
-/*   Updated: 2023/09/01 23:23:27 by vgejno           ###   ########.fr       */
+/*   Updated: 2023/09/01 23:59:30 by vgejno           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ class Btc {
 
 	private:
 
-		std::map<std::string, int> dataBase;
+		std::map<const std::string, int> _dataBase;
 
 	public:
 
-		Btc();
+		Btc( std::string fileCSV );
 		~Btc();
 
 		Btc( const Btc& other );
@@ -37,13 +37,11 @@ class Btc {
 		class Exception : public std::exception {
 
 			public:
-		} 
+				const char *what() const throw();
+		};
 	
 };
 
-std::ostream& operator<<(std:: ostream& os, const Btc& rhs ) {
-	
-	
-}
+std::ostream& operator<<(std:: ostream& os, const Btc& rhs );
 
 #endif
