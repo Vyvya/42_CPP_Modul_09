@@ -6,7 +6,7 @@
 /*   By: vgejno <vgejno@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 22:41:15 by vgejno            #+#    #+#             */
-/*   Updated: 2023/09/01 23:59:30 by vgejno           ###   ########.fr       */
+/*   Updated: 2023/09/04 20:13:01 by vgejno           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,29 @@ class Btc {
 
 	private:
 
-		std::map<const std::string, int> _dataBase;
+		std::map<std::string, double> _dataBase;
+		std::map<std::string, std::string> _dataInput;
+
+		void parseInputFile( const std::string& fileInput );
 
 	public:
 
-		Btc( std::string fileCSV );
+		Btc( const std::string& fileCSV, const std::string& fileInput );
 		~Btc();
 
 		Btc( const Btc& other );
 		Btc& operator=( const Btc& other );
 
-		class Exception : public std::exception {
+		class ExceptionFile : public std::exception {
 
 			public:
-				const char *what() const throw();
+				virtual const char *what() const throw();
+		};
+
+		class ExceptionReadFile : public std::exception {
+
+			public:
+				virtual const char *what() const throw();
 		};
 	
 };

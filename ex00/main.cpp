@@ -6,7 +6,7 @@
 /*   By: vgejno <vgejno@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 22:41:29 by vgejno            #+#    #+#             */
-/*   Updated: 2023/09/01 23:26:22 by vgejno           ###   ########.fr       */
+/*   Updated: 2023/09/04 18:59:52 by vgejno           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,19 @@ int main( int argc, char **argv ) {
 		return -1;
 	}
 
-	readFile( argv[1] );
+	// readFile( argv[1] );
 	
+	try {
+
+		// Btc btc( argv[1] );
+		Btc btc( "data.csv", argv[1] );
+
+	} catch (const Btc::ExceptionFile& e) {
+
+		std::cerr << "Error: " << e.what() << std::endl;
+		return 1;
+	}
+
+	// (void)argv;
+	return 0;
 }

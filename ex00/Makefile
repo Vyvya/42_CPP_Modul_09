@@ -5,6 +5,7 @@ FLAGS += -Wall -Werror -Wextra
 RM = rm -f
 
 SRCS = main.cpp \
+		BitcoinExchange.cpp \
 
 OBJS = $(SRCS:.cpp=.o)
 
