@@ -6,7 +6,7 @@
 /*   By: vgejno <vgejno@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 22:41:29 by vgejno            #+#    #+#             */
-/*   Updated: 2023/09/04 18:59:52 by vgejno           ###   ########.fr       */
+/*   Updated: 2023/09/05 17:15:09 by vgejno           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Color.hpp"
 
 void readFile( char *file ) {
 
