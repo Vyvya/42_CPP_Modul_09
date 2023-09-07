@@ -6,7 +6,7 @@
 /*   By: vgejno <vgejno@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 22:41:15 by vgejno            #+#    #+#             */
-/*   Updated: 2023/09/05 20:08:30 by vgejno           ###   ########.fr       */
+/*   Updated: 2023/09/07 22:45:04 by vgejno           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ class Btc {
 	private:
 
 		std::map<std::string, double> _dataBase;
-		// std::map<std::string, std::string> _dataInput;
 		double _toValue;
 
 	public:
@@ -36,12 +35,15 @@ class Btc {
 		Btc( const Btc& other );
 		Btc& operator=( const Btc& other );
 
-		void parseInputFile( std::map<std::string, double> _dataBase, const std::string& fileInput );
+		std::map<std::string, double> getMap() const;
+		void bitcoinExchange( std::map<std::string, double> _dataBase, const std::string& fileInput );
 		double convert( std::string literal );
-		double calculateValueOnDate( std::map<std::string, double> _dataBase, std::string dateInput, double toDouble);
-		bool findDate( std::map<std::string, double> _dataBase, std::string dateInput );
+		double calculateValueOnDate( std::map<std::string, double> _dataBase, std::string trimDateInput, double toDouble);
+		bool findDate( std::string trimDateInput ); //std::map<std::string, double> _dataBase, 
 		std::string trim( std::string& dateInput );
 		bool isValidDate( const std::string& dateInput );
+		std::string formatWidthDate( int value, int width );
+		int calculateDateInt( const std::string& date1, const std::string& date2 );
 		
 		class ExceptionFile : public std::exception {
 
