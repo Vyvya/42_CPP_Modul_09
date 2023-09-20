@@ -16,26 +16,54 @@ PmergeMe::PmergeMe( std::string av ) {
 
 PmergeMe::~PmergeMe() {}
 
+bool PmergeMe::isDigit(const std::string& numStr) {
+
+    std::string::const_iterator it = numStr.begin();
+    while (it != numStr.end() && std::isdigit(*it))
+		++it;
+    return !numStr.empty() && it == numStr.end();
+}
+
+int PmergeMe::parsePairs(std::string& numStr)  {
+
+	if( !isDigit(numStr)) {
+
+		log( "Not a digit" );
+		return -1; 
+	}
+	return std::stoi( numStr );
+}
+
 void PmergeMe::buildPairs(std::string av) {
 	std::istringstream iss(av);
 	std::string num1_str, num2_str;
+	int num1, num2;
 
 	while ( iss >> num1_str ) {
 
-		int num1 = std::stoi( num1_str );
+		num1 = parsePairs( num1_str );
+		if( num1 == -1 ) {
+			return;
+		}
 
-		if ( iss >> num2_str ) {
+		if (!(iss >> num2_str)) {
+            log("Error reading num2_str");
+            return;
+        }
 
-			int num2 = std::stoi( num2_str );
+		num2 = parsePairs( num2_str );
+		if( num2 == -1 ) {
+			return;
+		}
 
-			if( num1 > num2 ) {
+		if( num1 > num2 ) {
 
-				swapNum( &num1, &num2 );
-			}
-			_pairList.push_back(std::make_pair( num1, num2 ));
-			std::cout << R << num1 << " " << num2 << std::endl;
+			swapNum( &num1, &num2 );
+		}
+		_pairList.push_back(std::make_pair( num1, num2 ));
+		std::cout << R << num1 << " " << num2 << std::endl;
 
-		} else {
+		if( !num1_str.empty() && num2_str.empty() ) {
 
 			_unpairList.push_back( num1 );
 			std::cout << num1 << std::endl;
@@ -52,6 +80,22 @@ void PmergeMe::buildPairs(std::string av) {
 	sortPairs( _pairList, _unpairList );
 }
 
+		// if( !isDigit(num1_str)) {
+
+		// 	log( "Not a digit" );
+		// 	return; 
+		// }
+		// int num1 = std::stoi( num1_str );
+
+		// if ( iss >> num2_str ) {
+
+		// 	if( !isDigit(num1_str)) {
+
+		// 		log( "Not a digit" );
+		// 	return; 
+		// }
+		// num2 = std::stoi( num2_str );
+
 void PmergeMe::swapNum( int* num1, int* num2 ) {
 
 	int temp = *num1;
@@ -59,32 +103,7 @@ void PmergeMe::swapNum( int* num1, int* num2 ) {
 	*num2 = temp;
 }
 
-// void PmergeMe::swapPairs( std::list<std::pair<int, int> > _pairList, std::list<int> _unpairList ) {
-
-// 	(void)_unpairList;
-
-// 	std::list<std::pair<int, int> >::iterator it = _pairList.begin();
-// 	std::list<std::pair<int, int> >::iterator itf;
-// 	std::list<std::pair<int, int> >::iterator its = _pairList.begin();
-
-// 	// swapPairs( )
-// 	for( itf = _pairList.begin(); itf!= _pairList.end(); itf++ ) {
-
-// 		for( its = it++; its!= _pairList.end(); its++ ) {
-
-// 			if( (*itf).first > (*its).first ) {
-
-// 				swapNum( &(*itf).first, &(*its).first );
-// 			}
-// 			if( (*itf).second > (*its).second ) {
-
-// 				swapNum( &(*itf).second, &(*its).second );
-// 			}
-// 		}
-// 	}
-// }
-
-void PmergeMe::sortPairs( std::list<std::pair<int, int> > _pairList, std::list<int> _unpairList ) {
+void PmergeMe::sortPairs( std::list<std::pair<int, int> >& _pairList, std::list<int>& _unpairList ) {
 
 	(void)_unpairList;
 
@@ -144,18 +163,8 @@ void PmergeMe::sortPairs( std::list<std::pair<int, int> > _pairList, std::list<i
 		std::cout << std::endl;
 
 		mergeNum( temp2, mergeList1 );
-		// if( it2 != _pairList.end() ) {
+		mergeList1.push_back( temp2 );
 
-		// 	std::list<std::pair<int, int> >::iterator it3 = it2++;
-		// 	if( (*it3).first > temp2 ) {
-
-			mergeList1.push_back( temp2 );
-		// sortPairs( _pairList, _unpairList );
-
-			// }
-
-		// }
-		// _pairList.pop_back();
 	}
 	std::cout << std::endl;
 	std::cout << GR << "final mergeList1: ";
