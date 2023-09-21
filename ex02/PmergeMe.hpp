@@ -13,8 +13,8 @@ class PmergeMe {
 
 	private:
 
-		std::list<std::pair<int, int> > _pairList;
-		std::list<int> _unpairList;
+		// std::list<std::pair<int, int> > _pairList;
+		std::list<int> _list;
 
 
 	public:
@@ -23,13 +23,12 @@ class PmergeMe {
 		~PmergeMe();
 
 		void log( std::string msg );
-		void buildPairs( std::string av );
-		int parsePairs(std::string& numStr);
+		void buildList( std::string av );
+		void printList(const std::list<int>& _list);
 		bool isDigit(const std::string& numStr);
-		// void swapPairs( std::list<std::pair<int, int> > _pairList, std::list<int> _unpairList );
-		void sortPairs( std::list<std::pair<int, int> >& _pairList, std::list<int>& _unpairList );
-		void mergeNum( int num, std::list<int> mergeList1 );
-		void swapNum( int* num1, int* num2 );
+		void mergeSort( std::list<int>& _list );
+		void merge( std::list<int>& _list, std::list<int>& left, std::list<int>& right);
+		
 };
 
 
