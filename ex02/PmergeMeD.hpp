@@ -1,5 +1,5 @@
-#ifndef PMERGEME_HPP
-# define PMERGEME_HPP
+#ifndef PMERGEMED_HPP
+# define PMERGEMED_HPP
 
 #include <string>
 #include <iostream>
@@ -9,24 +9,24 @@
 #include <deque>
 #include <utility>
 
-class PmergeMe {
+class PmergeMeD {
 
 	private:
 
 		// std::list<std::pair<int, int> > _pairList;
-		std::list<int> _list;
+		std::deque<int> _deque;
 
 
 	public:
 
-		PmergeMe( std::string av );
-		~PmergeMe();
+		PmergeMeD( std::string av );
+		~PmergeMeD();
 
 		void log( std::string msg );
-		void buildList( std::string av );
-		void printList(const std::list<int>& _list);
+		void buildDeque( std::string av );
+		void printDeque(const std::deque<int>& _deque);
 		bool isDigit(const std::string& numStr);
-		void fordJohnsonSortList( std::list<int>& _list );
+		void fordJohnsonSortDeque( std::deque<int>& _deque );
 		void merge( std::list<int>& _list, std::list<int>& left, std::list<int>& right);
 
 };

@@ -4,24 +4,45 @@
 #include <utility>
 #include <ctime>
 #include <iomanip>
+#include <sys/time.h>
 
 PmergeMe::PmergeMe( std::string av ) {
 
 	// std::cout << "PmergeMe constructor called" << std::endl;
-	std::cout << av << std::endl;
-	std::cout << std::endl;
+	// std::cout << av << std::endl;
+	// std::cout << std::endl;
 
+	timeval startTime, endTime;
+gettimeofday(&startTime, NULL);
+buildList(av);
+gettimeofday(&endTime, NULL);
+
+double elapsedTime = (endTime.tv_sec - startTime.tv_sec) * 1000000.0 + (endTime.tv_usec - startTime.tv_usec);
+
+// Apply the manipulators for formatting
+std::cout << GR << "Time to process a range of " << _list.size() << " elements with std::deque: "
+          << std::fixed << std::setprecision(5) << elapsedTime << " us" << std::endl;
+std::cout << RES << std::endl;
+
+
+
+	// timeval startTime, endTime;
+	// gettimeofday(&startTime, NULL);
+	// buildList(av);
+	// gettimeofday(&endTime, NULL);
+
+	// long long elapsedTime = (endTime.tv_sec - startTime.tv_sec) * 1000000LL + (endTime.tv_usec - startTime.tv_usec);
 	clock_t startTime = clock(); // Timer<milliseconds, steady_clock>
 	buildList( av );
 	clock_t endTime = clock(); // Timer<milliseconds, steady_clock>
-	double elapsedTime = static_cast<double>(endTime - startTime) * 1e6 / CLOCKS_PER_SEC;
-	std::cout << std::fixed << std::setprecision(5) << elapsedTime << " us" << std::endl;
+	double elapsedTimeClock = static_cast<double>(endTime - startTime) * 1e6 / CLOCKS_PER_SEC;
+	std::cout << GR << "Time to process a range of\t" << _list.size() << " elements with std::list : \t" << std::fixed << std::setprecision(5) << elapsedTime << " us" << std::endl;
+	std::cout << RES << std::endl;
 }
 
 PmergeMe::~PmergeMe() {
 
 	// std::cout << "PmergeMe destructor called" << std::endl;
-
 }
 
 bool PmergeMe::isDigit(const std::string& numStr) {
@@ -50,13 +71,13 @@ void PmergeMe::buildList(std::string av) {
 
 	}
 
-	std::cout << "Before:\t";
+	std::cout << BL << "Before:\t";
 	printList( _list );
-	mergeSort( _list );
+	fordJohnsonSortList( _list );
 
-	std::cout << "After:\t";
+	std::cout << OR << "After:\t";
 	printList( _list );
-}	
+}
 
 void PmergeMe::printList( const std::list<int>& _list ) {
 
@@ -67,7 +88,7 @@ void PmergeMe::printList( const std::list<int>& _list ) {
 	std::cout << std::endl;
 }
 
-void PmergeMe::mergeSort( std::list<int>& _list ) {
+void PmergeMe::fordJohnsonSortList( std::list<int>& _list ) {
 
 	if( _list.size() <= 1 ) {
 		return;
@@ -90,8 +111,8 @@ void PmergeMe::mergeSort( std::list<int>& _list ) {
 		++i;
 	}
 
-	mergeSort( left );
-	mergeSort( right );
+	fordJohnsonSortList( left );
+	fordJohnsonSortList( right );
 
 	_list.clear();
 	merge( _list, left, right );
@@ -103,7 +124,7 @@ void PmergeMe::merge( std::list<int>& _list, std::list<int>& left, std::list<int
     std::list<int>::iterator rightIt = right.begin();
 
     while ( leftIt != left.end() && rightIt != right.end() ) {
-        
+
         if ( *leftIt <= *rightIt) {
             _list.push_back( *leftIt );
             leftIt++;
