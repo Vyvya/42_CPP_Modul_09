@@ -26,8 +26,9 @@ class PmergeMe {
 		void buildList( std::string av );
 		void printList(const std::list<int>& _list);
 		bool isDigit(const std::string& numStr);
-		void fordJohnsonSortList( std::list<int>& _list );
-		void merge( std::list<int>& _list, std::list<int>& left, std::list<int>& right);
+		void checkListStraggler( std::list<int>& _list, int& straggler );
+		void fordJohnsonSortList( std::list<int>& _list, int straggler );
+		void merge( std::list<int>& _list, std::list<int>& left, std::list<int>& right, int straggler );
 
 };
 

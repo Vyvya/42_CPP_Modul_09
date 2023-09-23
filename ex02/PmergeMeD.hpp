@@ -26,8 +26,9 @@ class PmergeMeD {
 		void buildDeque( std::string av );
 		void printDeque(const std::deque<int>& _deque);
 		bool isDigit(const std::string& numStr);
-		void fordJohnsonSortDeque( std::deque<int>& _deque );
-		void merge( std::list<int>& _list, std::list<int>& left, std::list<int>& right);
+		void checkDequeStraggler( std::deque<int>& _deque, int& straggler );
+		void fordJohnsonSortDeque( std::deque<int>& _deque, int straggler );
+		void merge( std::deque<int>& _deque, std::deque<int>& left, std::deque<int>& right, int straggler );
 
 };
 

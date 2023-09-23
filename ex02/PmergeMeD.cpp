@@ -17,14 +17,24 @@ PmergeMeD::PmergeMeD( std::string av ) {
 
 // ...
 
-	timeval startTime, endTime;
-	gettimeofday(&startTime, NULL);
-	buildDeque(av);
-	gettimeofday(&endTime, NULL);
+	// timeval startTime, endTime;
+	// gettimeofday(&startTime, NULL);
+	// buildDeque(av);
+	// gettimeofday(&endTime, NULL);
 
-	double elapsedTime = (endTime.tv_sec - startTime.tv_sec) * 1000000LL + (endTime.tv_usec - startTime.tv_usec);
+	timeval start, end;
+	gettimeofday(&start, NULL);
+	// unsync the I/O of C and C++.
+    std::ios_base::sync_with_stdio(false);
+	buildDeque(av);
+	gettimeofday(&end, NULL);
+
+	double elapsedTime;
+
+	elapsedTime = (end.tv_sec - start.tv_sec) * 1e6;
+    elapsedTime = (elapsedTime + (end.tv_usec - start.tv_usec)) * 1e-6;
 	std::cout << GR << "Time to process a range of " << _deque.size() << " elements with std::deque: "
-			<< std::fixed << std::setprecision(5) << elapsedTime << " us" << std::endl;
+			<< std::fixed << std::setprecision(6) << elapsedTime << " us" << std::endl;
 	std::cout << RES << std::endl;
 
 }
@@ -60,9 +70,14 @@ void PmergeMeD::buildDeque(std::string av) {
 
 	}
 
+	std::cout << BL << "Ford Johnson Sort Deque" << std::endl;
 	std::cout << BL << "Before:\t";
 	printDeque( _deque );
-	// mergeSort( _list );
+	int straggler = 0;
+	checkDequeStraggler( _deque, straggler );
+	// std::cout << OR << "straggler: " << straggler << std::endl;
+
+	fordJohnsonSortDeque( _deque, straggler );
 
 	std::cout << OR << "After:\t";
 	printDeque( _deque );
@@ -70,25 +85,55 @@ void PmergeMeD::buildDeque(std::string av) {
 
 void PmergeMeD::printDeque( const std::deque<int>& _deque ) {
 
-	for( std::deque<int>::const_iterator it = _deque.begin(); it != _deque.end(); it++ ) {
+	for(  std::deque<int>::const_iterator it = _deque.begin(); it != _deque.end(); it++ ) {
 
-		std::cout << *it << " ";
+		std::cout << " " << *it;
 	}
 	std::cout << std::endl;
 }
 
-void PmergeMeD::fordJohnsonSortDeque( std::deque<int>& _deque ) {
+void PmergeMeD::checkDequeStraggler( std::deque<int>& _deque, int& straggler ) {
 
 	if( _deque.size() <= 1 ) {
 		return;
 	}
 
-	if( (_deque.size() % 2) == 1 ) {
+	bool isStraggler = (_deque.size() % 2 == 1);
+	// std::cout << "isStraggler: " << isStraggler << std::endl;
+
+	// int straggler = 0;
+	if( isStraggler ) {
 
 		std::deque<int>::iterator its = _deque.end();
-		int straggler = *its;
-		std::cout << "straggler: " << straggler << std::endl;
+		--its;
+		straggler = *its;
+		_deque.pop_back();
+		// std::cout << GR << "straggler: " << straggler << std::endl;
 	}
+}
+
+void PmergeMeD::fordJohnsonSortDeque( std::deque<int>& _deque, int straggler ) {
+
+	// int straggler = 0;
+	// std::cout << "straggler: " << straggler << std::endl;
+
+	if( _deque.size() <= 1 ) {
+		return;
+	}
+
+	// bool isStraggler = (_deque.size() % 2 == 1);
+	// // std::cout << "isStraggler: " << isStraggler << std::endl;
+
+	// int straggler = 0;
+	// if( isStraggler ) {
+
+	// 	std::deque<int>::iterator its = _deque.end();
+	// 	--its;
+	// 	straggler = *its;
+	// 	_deque.pop_back();
+	// 	std::cout << "straggler: " << straggler << std::endl;
+	// }
+	// printDeque( _deque );
 
 	std::deque<int> left;
 	std::deque<int> right;
@@ -107,42 +152,58 @@ void PmergeMeD::fordJohnsonSortDeque( std::deque<int>& _deque ) {
 		++i;
 	}
 
-	fordJohnsonSortDeque( left );
-	fordJohnsonSortDeque( right );
+	fordJohnsonSortDeque( left, 0);
+	fordJohnsonSortDeque( right, 0 );
 
 	_deque.clear();
+	merge( _deque, left, right, straggler );
 }
-// 	merge( _list, left, right );
-// }
 
-// void PmergeMe::merge( std::list<int>& _list, std::list<int>& left, std::list<int>& right ) {
+void PmergeMeD::merge( std::deque<int>& _deque, std::deque<int>& leftIt, std::deque<int>& rightIt, int straggler ) {
 
-//     std::list<int>::iterator leftIt = left.begin();
-//     std::list<int>::iterator rightIt = right.begin();
+    // std::deque<int>::iterator leftIt = left.begin();
+    // std::deque<int>::iterator rightIt = right.begin();
 
-//     while ( leftIt != left.end() && rightIt != right.end() ) {
+	// std::cout << "straggler: " << straggler << std::endl;
 
-//         if ( *leftIt <= *rightIt) {
-//             _list.push_back( *leftIt );
-//             leftIt++;
-//         } else {
-//              _list.push_back( *rightIt );
-//             rightIt++;
-//         }
-//     }
+	// Merge the sorted left and right halves back together
+    while ( !leftIt.empty() && !rightIt.empty() ) {
 
-//     while( leftIt != left.end() ) {
+        if ( leftIt.front() <= rightIt.front() ) {
+            _deque.push_back( leftIt.front() );
+            leftIt.pop_front();
+        } else {
+             _deque.push_back( rightIt.front() );
+            rightIt.pop_front();
+        }
+    }
 
-// 		_list.push_back(( *leftIt ));
-// 		++leftIt;
-// 	}
+	// Append any remaining elements from both containers
+    _deque.insert( _deque.end(), leftIt.begin(), leftIt.end() );
+    _deque.insert( _deque.end(), rightIt.begin(), rightIt.end() );
 
-// 	 while( rightIt != right.end() ) {
+	// Insert the straggler element back into the sorted deque
+	if( straggler ) {
 
-// 		_list.push_back(( *rightIt ));
-// 		++rightIt;
-// 	}
-// }
+		// std::cout << "straggler: " << straggler << std::endl;
+
+		std::deque<int>::iterator itEnd = _deque.end();
+		for( std::deque<int>::iterator it = _deque.begin(); it != _deque.end(); it++ ) {
+
+			if( straggler < *it ) {
+
+				_deque.insert( it, straggler );
+				break;
+			}
+
+			if( straggler > *itEnd ) {
+
+				_deque.push_back( straggler );
+				break;
+			}
+		}
+	}
+}
 
 void PmergeMeD::log( std::string msg ) {
 
