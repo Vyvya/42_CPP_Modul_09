@@ -7,7 +7,7 @@ int main( int ac, char **av ) {
 	if( ac != 2 ) {
 
 		std::cerr << "Error: wrong number of arguments" << std::endl;
-		return 0;
+		return 1;
 	}
 
 	RPN stack( av[1] );

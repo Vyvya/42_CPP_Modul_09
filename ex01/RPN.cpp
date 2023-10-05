@@ -2,7 +2,7 @@
 
 RPN::RPN( std::string arg ) {
 
-	std::cout << "RNP constructor called" << std::endl;
+	// std::cout << "RNP constructor called" << std::endl;
 	_operations[0] = "+";
 	_operations[1] = "-";
 	_operations[2] = "*";
@@ -13,18 +13,18 @@ RPN::RPN( std::string arg ) {
 
 void RPN::buildStack( std::string arg ) {
 
-	// std::cout << "RPN::buildStack: " << std::endl;
-
 	std::istringstream iss( arg );
 	std::string token;
-	// std::string operations[4];
+
 	while( getline(iss, token, ' ')) {
 
 		if( isOperator(token)) {
 
-			// std::cout << "oper: " << token << std::endl;
-			performOperation( _rpn, token );
-		} else { // if there is a numeric value
+			if( performOperation( _rpn, token ) == -1 ) {
+
+				return;
+			}
+		} else {
 
 			double num;
 			std::istringstream numIss(token);
@@ -32,7 +32,7 @@ void RPN::buildStack( std::string arg ) {
 			if( numIss >> num ) {
 
 				_rpn.push_back( num );
-				// std::cout << "num: " << num << std::endl;
+
 			} else {
 
 				std::cout << "Error Invalid input" << std::endl;
@@ -41,21 +41,16 @@ void RPN::buildStack( std::string arg ) {
 		}
 	}
 
-	for( std::vector<double>::iterator it = _rpn.begin(); it < _rpn.end(); it++ ) {
-
-		std::cout << "num: " << *it << std::endl;
-	}
-
 	if( _rpn.size() != 1 ) {
 
-		std::cout << _rpn.size() << "Error Invalid input combination" << std::endl;
+		std::cout << "Error Invalid input combination" << std::endl;
 		return;
 
 	} else {
 
 		double res = _rpn.front();
 		_rpn.pop_back();
-		std::cout << "Result: " << res << std::endl;
+		std::cout << res << std::endl;
 	}
 }
 
@@ -76,14 +71,10 @@ std::string RPN::getOperations() const {
 
 bool RPN::isOperator( const std::string token ) {
 
-	std::cout << "arg: " << token << std::endl;
-
 	for( int i = 0; i < 4; i++ ) {
 
-		// std::cout << "1" << std::endl;
-
 		if( token == _operations[i] ) {
-			// std::cout << "2" << std::endl;
+
 			return true;
 		}
 	}
@@ -92,47 +83,41 @@ bool RPN::isOperator( const std::string token ) {
 
 double RPN::performOperation( std::vector<double> &rpn, std::string token ) {
 
-	std::cout << "RPN::performOperation: " << std::endl;
-
 	if (rpn.size() < 2) {
+
         std::cout << "Error: Not enough operands for operator " << token << std::endl;
         return -1;
     }
 
 	double lnum = rpn.back();
-	std::cout << "lnum: " << lnum << std::endl;
 	rpn.pop_back();
 
 	double rnum = rpn.back();
-	std::cout << "rnum: " << rnum << std::endl;
 	rpn.pop_back();
 
 	if( token == "+" ) {
-		std::cout << "rnum + lnum: " << rnum + lnum << std::endl;
 
 		rpn.push_back( lnum + rnum );
 
 	} else if( token == "-" ) {
-		std::cout << "rnum - lnum: " << rnum - lnum << std::endl;
 
 		rpn.push_back( rnum - lnum );
 
 	} else if( token == "*" ) {
-		std::cout << "rnum * lnum: " << rnum * lnum << std::endl;
 
 		rpn.push_back( lnum * rnum );
 
 	} else if( token == "/" ) {
 
-		if( rnum == 0 ) {
+		if( lnum == 0 ) {
 			std::cout << "Error division by 0" << std::endl;
 			return -1;
 
 		} else {
-			std::cout << "rnum / lnum: " << rnum / lnum << std::endl;
 
 			rpn.push_back( rnum / lnum );
 		}
+
 	} else {
 
 		std::cout << "Error unknown operator" << std::endl;
@@ -143,5 +128,5 @@ double RPN::performOperation( std::vector<double> &rpn, std::string token ) {
 
 RPN::~RPN() {
 
-	std::cout << "RPN destructor called" << std::endl;
+	// std::cout << "RPN destructor called" << std::endl;
 }

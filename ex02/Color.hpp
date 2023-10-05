@@ -9,8 +9,6 @@
 #define OL	"\033[38;5;100m"
 #define YL	"\033[38;5;188m"
 
-
-
 #define RES	"\033[0m"
 
 #endif

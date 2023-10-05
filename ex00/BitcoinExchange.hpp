@@ -6,7 +6,7 @@
 /*   By: vgejno <vgejno@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 22:41:15 by vgejno            #+#    #+#             */
-/*   Updated: 2023/09/07 22:45:04 by vgejno           ###   ########.fr       */
+/*   Updated: 2023/09/24 17:39:43 by vgejno           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Btc {
 		void bitcoinExchange( std::map<std::string, double> _dataBase, const std::string& fileInput );
 		double convert( std::string literal );
 		double calculateValueOnDate( std::map<std::string, double> _dataBase, std::string trimDateInput, double toDouble);
-		bool findDate( std::string trimDateInput ); //std::map<std::string, double> _dataBase, 
+		bool findDate( std::string trimDateInput );
 		std::string trim( std::string& dateInput );
 		bool isValidDate( const std::string& dateInput );
 		std::string formatWidthDate( int value, int width );

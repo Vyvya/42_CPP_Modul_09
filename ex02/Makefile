@@ -6,7 +6,6 @@ RM = rm -f
 
 SRCS = main.cpp \
 		PmergeMe.cpp \
-		PmergeMeD.cpp \
 
 OBJS = $(SRCS:.cpp=.o)
 
